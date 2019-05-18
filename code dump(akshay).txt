@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+<h1>Lights Out!</h1>
+
+  <table id="game_table">
+    <tr>
+      <td id="cel-0-0"></td>
+      <td id="cel-0-1"></td>
+      <td id="cel-0-2"></td>
+      <td id="cel-0-3"></td>
+      <td id="cel-0-4"></td>
+      <td id="cel-0-5"></td>
+      <td id="cel-0-6"></td>
+    </tr>
+    <tr>
+      <td id="cel-1-0"></td>
+      <td id="cel-1-1"></td>
+      <td id="cel-1-2"></td>
+      <td id="cel-1-3"></td>
+      <td id="cel-1-4"></td>
+      <td id="cel-1-5"></td>
+      <td id="cel-1-6"></td>
+    </tr>
+    <tr>
+      <td id="cel-2-0"></td>
+      <td id="cel-2-1"></td>
+      <td id="cel-2-2"></td>
+      <td id="cel-2-3"></td>
+      <td id="cel-2-4"></td>
+      <td id="cel-2-5"></td>
+      <td id="cel-2-6"></td>
+    </tr>
+    <tr>
+      <td id="cel-3-0"></td>
+      <td id="cel-3-1"></td>
+      <td id="cel-3-2"></td>
+      <td id="cel-3-3"></td>
+      <td id="cel-3-4"></td>
+      <td id="cel-3-5"></td>
+      <td id="cel-3-6"></td>
+    </tr>    
+    <tr>
+      <td id="cel-4-0"></td>
+      <td id="cel-4-1"></td>
+      <td id="cel-4-2"></td>
+      <td id="cel-4-3"></td>
+      <td id="cel-4-4"></td>
+      <td id="cel-4-5"></td>
+      <td id="cel-4-6"></td>
+    </tr>
+  </table>
+  
+</body>
+</html>
+
+#game_table{
+  border: 1px solid black;
+  
+}
+
+#game_table td {
+  border: solid 1px red;
+  width: 50px;
+  height: 50px;
+  background-color: darkblue;
+}
+
+.on {
+  background-color: red !important;
+}
+
+const HEIGHT = 5;
+const WIDTH = 7;
+const DIFFICULTY_LEVEL = 4;
+
+//create random number from 0 to max
+function randomNumber(max){
+  return Math.floor(Math.random()*max);
+}
+
+//crete 7 random moves
+function randomBoard(){
+  for(let i=0; i<DIFFICULTY_LEVEL; i++){
+    let x=randomNumber(WIDTH);
+    let y=randomNumber(HEIGHT);
+    toggleCellAndNeighbors(x,y);
+  }
+}
+
+//function to toggle is x,y coordinates
+function toggleCell(x,y){
+  if((y>=0 && y<WIDTH) &&(x>=0 && x<HEIGHT)){
+    console.log('cel-'+x+'-'+y);
+    document.getElementById('cel-'+x+'-'+y).classList.toggle('on');
+  }
+}
+
+function toggleCellAndNeighbors(x,y){
+  toggleCell(x,y);
+  toggleCell(x,y-1);
+  toggleCell(x,y+1);
+  toggleCell(x-1,y);
+  toggleCell(x+1,y);
+}
+
+function handleClick(event){
+  let x = Number(event.target.id.split('-')[1]);
+  let y = Number(event.target.id.split('-')[2]);
+  toggleCellAndNeighbors(x,y);
+  if(checkWon()){
+    setTimeout(winHandle, 0);
+  }
+}
+
+function winHandle(){
+  alert('You won!');
+  alert('Try one more!');
+  randomBoard();
+}
+
+function checkWon(){
+  let allcells = document.querySelectorAll('#game_table td');
+  for(let cell of allcells){
+    if(cell.classList.contains('on')){
+      return false;
+    }
+  }
+  return true;
+}
+
+document.querySelector('#game_table').addEventListener('click', handleClick);
+randomBoard();

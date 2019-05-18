@@ -1,0 +1,15 @@
+#game_table{
+  border: 1px solid black;
+
+}
+
+#game_table td {
+  border: solid 1px red;
+  width: 50px;
+  height: 50px;
+  background-color: darkblue;
+}
+
+.on {
+  background-color: red !important;
+}
